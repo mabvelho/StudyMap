@@ -3,6 +3,7 @@ package com.example.studymap;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -15,11 +16,19 @@ import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class SubjectActivity extends AppCompatActivity {
+
+    ArrayAdapter<String> adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +45,32 @@ public class SubjectActivity extends AppCompatActivity {
                 showForgotDialog(SubjectActivity.this);
             }
         });
+
+        final ListView lv = findViewById(R.id.listD);
+
+        ArrayList<String> listItems=new ArrayList<String>();
+        adapter=new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1,
+                listItems);
+
+        lv.setAdapter(adapter);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                String item = (String) (lv.getItemAtPosition(position));
+                //Toast.makeText(DisciplineList2Activity.this, item, Toast.LENGTH_SHORT).show();
+
+
+                //showFlashcard();
+
+               /* Intent myIntent = new Intent(DisciplineList2Activity.this, ScrollingActivity.class);
+                myIntent.putExtra("name", item);
+                myIntent.putExtra("login", login);
+                DisciplineList2Activity.this.startActivity(myIntent);*/
+            }
+        });
+
     }
 
     private void showForgotDialog(Context c) {
@@ -84,10 +119,26 @@ public class SubjectActivity extends AppCompatActivity {
                 EditText frente = (EditText) dialog.findViewById(R.id.editTextTextMultiLine);
                 EditText verso = (EditText) dialog.findViewById(R.id.editTextTextMultiLine3);
                 Log.i("ASD", String.valueOf(frente.getText()));
-                //dialog.dismiss();
+                adapter.add(String.valueOf(frente.getText()) + " " + String.valueOf(verso.getText()));
+
+                dialog.dismiss();
             }
         });
 
         dialog.show();
+    }
+
+    public void showFlashcard(View view) {
+        AnkiFragment yourDialogFragment;
+        /*switch (view.getId()){
+            case R.id.button2:
+                yourDialogFragment = AnkiFragment.newInstance("\nComo que é o código para imprimir uma mensagem em Java?\n", "\nclass HelloWorld {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\"); \n    }\n}\n");
+                yourDialogFragment.show(getSupportFragmentManager().beginTransaction(), "DialogFragment");
+                break;
+            case R.id.button4:
+                yourDialogFragment = AnkiFragment.newInstance("\nComo é que se declara uma variável em em Java?\n", "\nstring texto = \"minha string\";\nint numero = 3;\nboolean verdadeiro = true;\n");
+                yourDialogFragment.show(getSupportFragmentManager().beginTransaction(), "DialogFragment");
+                break;
+        }*/
     }
 }
